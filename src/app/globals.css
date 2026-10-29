@@ -1,0 +1,312 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Ultron Core design tokens (Tailwind v4 CSS-first config)
+   Red / graphite premium engineering identity.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Premium graphite base — rich and dark but not flat black; red carries the
+     energy. A touch lighter than the very first build so surfaces read clearly. */
+  --color-bg: #14171d;
+  --color-bg-2: #1b1f27;
+  --color-surface: #232833;
+  --color-surface-2: #2d333f;
+  --color-text: #f7f8fa;
+  --color-text-dim: #b4bbc8;
+
+  /* Red is the signature. */
+  --color-red: #e53935;
+  --color-red-bright: #ff5a4d;
+  --color-red-deep: #b91c1c;
+  --color-ember: #f97316;
+
+  /* Backwards-compatible aliases so existing var(--color-cyan/violet/mint)
+     usage resolves to the red system during/after the rebrand. */
+  --color-cyan: #e53935;
+  --color-cyan-soft: #ff5a4d;
+  --color-violet: #f97316;
+  --color-mint: #e53935;
+
+  --color-border: rgba(188, 195, 208, 0.16);
+  --color-border-strong: rgba(188, 195, 208, 0.32);
+  --color-red-border: rgba(229, 57, 53, 0.45);
+
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-sans);
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+
+  --shadow-elevate: 0 1px 0 0 rgba(255, 255, 255, 0.05) inset, 0 18px 44px -24px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 0 1px rgba(229, 57, 53, 0.3), 0 14px 44px -14px rgba(229, 57, 53, 0.35);
+
+  --spacing-section: clamp(4rem, 10vw, 7.5rem);
+  --container-max: 1200px;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Fluid type scale */
+.text-display {
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  line-height: 1.04;
+}
+.text-h1 {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+}
+.text-h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+}
+.text-h3 {
+  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+}
+.text-lead {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  color: var(--color-text-dim);
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility: focus + reduced motion
+--------------------------------------------------------------------------- */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-red-bright);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--color-surface);
+  color: var(--color-text);
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-strong);
+  transition: top 0.18s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities / decorative
+--------------------------------------------------------------------------- */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.gradient-text {
+  background: linear-gradient(100deg, #ffffff 0%, var(--color-red-bright) 55%, var(--color-red) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.surface-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0)),
+    var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+}
+
+/* Signature accent: a thin red top-rule that appears on key cards for a
+   distinctive, engineered look rather than generic glassy dark cards. */
+.card-accent {
+  position: relative;
+}
+.card-accent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1.25rem;
+  right: 1.25rem;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-red), transparent 70%);
+  border-radius: 2px;
+}
+
+.hairline {
+  border-color: var(--color-border);
+}
+
+/* Distinctive diagonal "circuit" field — ties to the logo's angular U/C mark.
+   Warmer and more characterful than a plain dot grid. */
+.bg-grid {
+  background-image:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(229, 57, 53, 0.05) 0,
+      rgba(229, 57, 53, 0.05) 1px,
+      transparent 1px,
+      transparent 22px
+    ),
+    linear-gradient(to right, rgba(174, 180, 192, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(174, 180, 192, 0.045) 1px, transparent 1px);
+  background-size:
+    64px 64px,
+    64px 64px,
+    64px 64px;
+  mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, #000 35%, transparent 100%);
+}
+
+.glow-cyan {
+  box-shadow: var(--shadow-glow);
+}
+
+@keyframes pulse-flow {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Hero transformer: chaotic tasks get pulled toward the core, then fade. */
+@keyframes bw-suck {
+  0% {
+    opacity: 0.35;
+    transform: translateX(0) scale(1);
+  }
+  55% {
+    opacity: 1;
+    transform: translateX(150px) scale(0.6);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: translateX(200px) scale(0.3);
+  }
+}
+
+/* Results emerge cleanly on the right. */
+@keyframes bw-emerge {
+  0%,
+  45% {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  65% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Marquee strip (pain-point / tool names scrolling). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 32s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Oversized editorial display size for the hero hook. */
+.text-mega {
+  font-size: clamp(2.75rem, 8vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+/* Red underline swipe used to emphasize key words. */
+.mark-swipe {
+  background-image: linear-gradient(120deg, var(--color-red) 0%, var(--color-red-deep) 100%);
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 100% 0.32em;
+  padding: 0 0.04em;
+}
